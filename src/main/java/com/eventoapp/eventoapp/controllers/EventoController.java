@@ -1,19 +1,29 @@
 package com.eventoapp.eventoapp.controllers;
 
+import com.eventoapp.eventoapp.models.Convidado;
 import com.eventoapp.eventoapp.models.Evento;
+import com.eventoapp.eventoapp.repository.ConvidadoRepository;
 import com.eventoapp.eventoapp.repository.EventoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+
+import javax.validation.Valid;
+
+
 
 @Controller
 public class EventoController {
 
     @Autowired
     private EventoRepository eventoRepository;
+
+    @Autowired
+    private ConvidadoRepository convidadoRepository;
 
     @RequestMapping(value = "/cadastrarEvento", method = RequestMethod.GET)
     public String form (){
@@ -28,21 +38,41 @@ public class EventoController {
 
     @RequestMapping(value = "/eventos")
     public ModelAndView listaEventos(){
-        ModelAndView mv = new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView("index");
         Iterable<Evento> eventos = eventoRepository.findAll();
-        mv.addObject("eventos", eventos);
-        return mv;
+        modelAndView.addObject("eventos", eventos);
+        return modelAndView;
 
     }
-
     @RequestMapping(value="/{id}", method=RequestMethod.GET)
     public ModelAndView detalhesEvento(@PathVariable("id") long id){
         Evento evento = eventoRepository.findById(id);
-        ModelAndView mv = new ModelAndView("evento/detalhesEvento");
+        ModelAndView modelAndView = new ModelAndView("evento/detalhesEvento");
+        modelAndView.addObject("evento", evento);
 
-        mv.addObject("evento", evento);
+        Iterable<Convidado> convidados = convidadoRepository.findByEvento(evento);
 
-        return mv;
+        modelAndView.addObject("convidados", convidados);
+
+        return modelAndView;
     }
+    @PostMapping
+    @RequestMapping(value="/{id}", method=RequestMethod.POST)
+    public String detalhesEventoPost(@PathVariable("id") long id, @Valid Convidado convidado, BindingResult bindingResult, RedirectAttributes attributes){
+        System.out.println(bindingResult);
+        if (bindingResult.hasErrors()){
+            attributes.addFlashAttribute("mensagem", "Verifique os campos!");
+            return "redirect:/{id}";
+        }
+
+        Evento evento = eventoRepository.findById(id);
+        convidado.setEvento(evento);
+        convidadoRepository.save(convidado);
+        attributes.addFlashAttribute("mensagem", "Convidado adicionado com sucesso!");
+        return "redirect:/{id}";
+
+
+    }
+
 
 }
