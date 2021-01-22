@@ -1,5 +1,7 @@
 package com.eventoapp.eventoapp.models;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
@@ -13,6 +15,7 @@ public class Convidado {
     @NotEmpty
     private String nomeConvidado;
 
+    @Autowired
     @ManyToOne
     private Evento evento;
 
