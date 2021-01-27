@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html">
 <head>
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
-
+    <link rel="stylesheet" href="../../static/style/styleCss.css" />
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -14,39 +14,50 @@
     <title>EventosApp</title>
 </head>
 <body>
-
-    <h1>Evento</h1>
-    <a class="waves-effect waves-light btn light-blue lighten-1" href="/eventos"><i class="material-icons left">format_list_bulleted</i>Lista de Eventos</a>
-
-    <div th:each="evento : ${evento}" class="container">
+<nav>
+    <div class="nav-wrapper blue-grey lighten-4">
+        <a href="#" class="brand-logo" style="color: #292f36;"><strong>Evento</strong></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li> <a class="waves-effect waves-light btn blue-grey lighten-1" href="/eventos"><i class="material-icons left">format_list_bulleted</i>Lista de Eventos</a></li>
+        </ul>
+    </div>
+</nav>
+<br/><br/>
+    <div th:each="evento : ${evento}" class="container detalhes-evento">
+        <h5>Detalhes do Evento</h5>
         <div class="row">
             <p><strong>Nome: </strong><span th:text="${evento.nome}"></span></p>
             <p><strong>Local: </strong><span th:text="${evento.local}"></span></p>
             <p><strong>Data: </strong><span th:text="${evento.data}"></span></p>
             <p><strong>Horário: </strong><span th:text="${evento.horario}"></span></p>
         </div>
+    </div>
+    <div>
 
-        <th:block th:include="mensagemValidacao"></th:block>
 
-        <form method="post" class="container">
+        <form method="post" class="container form-convidado">
             <strong>Nome: </strong><input type="text" value="" name="nomeConvidado">
             <strong>RG: </strong> <input type="text" value="" name="rg">
-            <button class="waves-effect waves-light btn light-blue lighten-1" type="submit">Adicionar</button>
+            <button class="waves-effect waves-light btn blue-grey lighten-1" type="submit">Adicionar</button></br></br>
+            <th:block th:include="mensagemValidacao"></th:block>
         </form>
     </div>
-    <h5>Lista de Convidados</h5>
-    <div class="container" th:each="convidado : ${convidados}">
-        <div class="row">
-            <div class="input-field col s6">
-                <p><span th:text="${convidado.nomeConvidado}"></span></p>
-            </div>
-            <div class="input-field col s3">
-                <p><span th:text="${convidado.rg}"></span></p>
-            </div>
-        </div>
-    </div>
-
-
+        <table class="container tabela-convidado">
+            <thead>
+            <tr>
+                <th>Nome do Convidado </th>
+                <th>RG </th>
+                <th>Deletar</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="convidado : ${convidados}">
+                <td><span th:text="${convidado.nomeConvidado}"></span></td>
+                <td><span th:text="${convidado.rg}"></span></td>
+                <td><a class="waves-effect waves-light btn-small blue-grey lighten-1" th:href="${(#mvc.url('EC#deletarConvidado').arg(0, convidado.rg)).build()}"><i class="material-icons">delete</i></a></td>
+            </tr>
+            </tbody>
+        </table>
 
 <!-- Compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>

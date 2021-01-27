@@ -1,22 +1,35 @@
 package com.eventoapp.eventoapp.models;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
 public class Evento implements Serializable {
+
     private static final Long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @NotEmpty
     private String nome;
+
+    @NotEmpty
     private String local;
+
+    @NotEmpty
     private String data;
+
+    @NotEmpty
     private String horario;
 
-    @OneToMany
+    @Autowired
+    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Convidado> convidados;
 
 

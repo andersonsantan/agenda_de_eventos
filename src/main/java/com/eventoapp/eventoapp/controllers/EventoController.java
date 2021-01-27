@@ -31,8 +31,14 @@ public class EventoController {
     }
 
     @RequestMapping(value = "/cadastrarEvento", method = RequestMethod.POST)
-    public String form (Evento evento){
+    public String form (@Valid Evento evento, BindingResult result, RedirectAttributes attributes){
+        if (result.hasErrors()){
+            attributes.addFlashAttribute("mensagem", "Verifique os Campos");
+            return"redirect:/cadastrarEvento";
+        }
+
         eventoRepository.save(evento);
+        attributes.addFlashAttribute("mensagem", "Dados salvos com sucesso");
         return"redirect:/cadastrarEvento";
     }
 
@@ -56,12 +62,21 @@ public class EventoController {
 
         return modelAndView;
     }
+
+    @RequestMapping(value = "/deletarEvento")
+    public String deletarEvento(long id){
+        Evento evento = eventoRepository.findById(id);
+        eventoRepository.delete(evento);
+        return "redirect:/eventos";
+    }
+
+
     @PostMapping
     @RequestMapping(value="/{id}", method=RequestMethod.POST)
     public String detalhesEventoPost(@PathVariable("id") long id, @Valid Convidado convidado, BindingResult bindingResult, RedirectAttributes attributes){
         System.out.println(bindingResult);
         if (bindingResult.hasErrors()){
-            attributes.addFlashAttribute("mensagem", "Verifique os campos!");
+            attributes.addFlashAttribute("mensagem", "Verifique os campos e preencha corretamente.!");
             return "redirect:/{id}";
         }
 
@@ -71,6 +86,19 @@ public class EventoController {
         attributes.addFlashAttribute("mensagem", "Convidado adicionado com sucesso!");
         return "redirect:/{id}";
 
+
+    }
+
+    @RequestMapping(value="/deletarConvidado", method=RequestMethod.GET)
+    public String deletarConvidado(String rg) {
+    Convidado convidado = convidadoRepository.findByRg(rg);
+    convidadoRepository.delete(convidado);
+
+    Evento evento = convidado.getEvento();
+    long longId = evento.getId();
+    String idEvento = "" + longId;
+
+    return "redirect:/" + idEvento;
 
     }
 

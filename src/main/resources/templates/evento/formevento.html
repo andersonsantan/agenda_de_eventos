@@ -9,6 +9,7 @@
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="../../static/style/styleCss.css" rel="stylesheet"/>
 
     <meta charset="UTF-8">
     <title>EventosApp</title>
@@ -16,9 +17,20 @@
 
 
 <body>
-    <h1>Cadastro de Eventos</h1>
-    <a class="waves-effect waves-light btn light-blue lighten-1" href="/eventos"><i class="material-icons left">format_list_bulleted</i>Lista de Eventos</a>
+
+<nav>
+    <div class="nav-wrapper blue-grey lighten-4">
+        <a href="#" class="brand-logo" style="color: #292f36;"><strong>Cadastro de Eventos</strong></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a class="waves-effect waves-light btn blue-grey lighten-1" href="/eventos"><i class="material-icons left">format_list_bulleted</i>Lista de Eventos</a></li>
+
+        </ul>
+    </div>
+</nav><br/><br/>
+
+<div class="container form-evento">
     <form class="container" method="post">
+
         Nome:<input type="text" value="" name="nome">
         <div class="row">
             <div class="input-field col s6">
@@ -28,12 +40,13 @@
                 Data:<input type="date" value="" name="data">
             </div>
             <div class="input-field col s3">
-                Horario:<input type="text" value="" name="horario">
+                Horario:<input type="time" value="" name="horario">
             </div>
+            <th:block th:include="mensagemValidacao"></th:block>
         </div>
-        <button class="waves-effect waves-light btn light-blue lighten-1" type="submit">Salvar</button>
+        <button class="waves-effect waves-light btn blue-grey lighten-1" type="submit">Salvar</button>
     </form>
-
+</div>
 
 
     <!-- Compiled and minified JavaScript -->

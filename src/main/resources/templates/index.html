@@ -15,10 +15,16 @@
 </head>
 <body>
 
-    <h1>Lista de Eventos</h1>
+<nav>
+    <div class="nav-wrapper blue-grey lighten-4">
+        <a href="#" class="brand-logo" style="color: #292f36;"><strong>Lista de Eventos</strong></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a class="waves-effect waves-light btn blue-grey lighten-1" href="/cadastrarEvento"><i class="material-icons left">add_circle_outline</i>Cadastrar Evento</a></li>
+        </ul>
+    </div>
+</nav>
+<br/><br/>
 
-
-    <h3><a class="waves-effect waves-light btn light-blue lighten-1" href="/cadastrarEvento"><i class="material-icons left">add_circle_outline</i>Cadastrar Evento</a></h3>
 <div class="container">
     <table>
         <thead>
@@ -27,6 +33,7 @@
                 <th>Local</th>
                 <th>Data</th>
                 <th>Horário</th>
+                <th>Deletar</th>
             </tr>
         </thead>
         <tbody>
@@ -35,6 +42,7 @@
                 <td><span th:text="${evento.local}"></span></td>
                 <td><span th:text="${evento.data}"></span></td>
                 <td><span th:text="${evento.horario}"></span></td>
+                <td><a class="waves-effect waves-light btn-small blue-grey lighten-1" th:href="${(#mvc.url('EC#deletarEvento').arg(0, evento.id)).build()}"><i class="material-icons">delete</i></a></td>
             </tr>
         </tbody>
     </table>
